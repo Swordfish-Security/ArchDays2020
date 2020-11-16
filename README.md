@@ -42,14 +42,15 @@ http://%IP-ADDRESS%/
 **Импортируем файлы для нового проекта из нашего демо-репозитория:**
 
 http://%IP-ADDRESS%/projects/new
-Git Repository URL: https://github.com/Swordfish-Security/ArchDays2020
+*Git Repository URL:* https://github.com/Swordfish-Security/ArchDays2020
 
 **Переходим в консоль и скачиваем gitlab-runner, который будет запускать все необходимые операции по сканированию:**
 
 `sudo curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64`
 
 **Делаем бинарный файл runner-a исполняемым:**
-sudo chmod +x /usr/local/bin/gitlab-runner
+
+`sudo chmod +x /usr/local/bin/gitlab-runner`
 
 **Добавляем пользователя ОС для gitlab-runner-а, устанавливаем и запускаем сервис:**
 
@@ -87,6 +88,7 @@ http://%IP-ADDRESS%/root/ArchDays2020/-/settings/ci_cd#js-runners-settings
 
 **Конфигурация самого GitLab завершена и наш репозиторий содержит файл конфигурации пайплайна, который можно выполнить.**
 Для целей нашего живого демо мы уже задали все параметры, которые потребуются, чтобы просканировать собранное уязвимое приложение и его Dockerfile.
-Теперь достаточно запустить пайплайн на выполнение: http://%IP-ADDRESS%/root/ArchDays2020/-/pipelines/new
+Теперь достаточно запустить пайплайн на выполнение: 
+http://%IP-ADDRESS%/root/ArchDays2020/-/pipelines/new
 
 
