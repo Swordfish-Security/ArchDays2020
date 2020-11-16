@@ -7,24 +7,22 @@
 
 `sudo apt-get update && sudo apt-get install docker.io`
 
-**Добавляем текущего пользователя в группу docker, чтобы можно было работать с ним без sudo**
+**Добавляем текущего пользователя в группу docker, чтобы можно было работать с ним без sudo и перелогиниваемся:**
 
-`sudo addgroup <username> docker`
+`sudo addgroup %username% docker`
 
-**Перелогиниваемся**
-
-**Находим свой ip, либо локальный**
+**Находим свой ip-адрес. Либо локальный:**
 
 `ip addr`
 
-**Либо внешний**
+**... либо внешний:**
 
 `curl -s http://whatismyip.akamai.com`
 
-**Стартуем инстанс GitLab, указывая наш ip**
+**Стартуем инстанс GitLab, указывая наш ip-адрес:**
 
 `docker run --detach \
---hostname 	 \
+--hostname %IP-ADDRESS% \
 --publish 443:443 --publish 80:80 \
 --name gitlab \
 --restart always \
@@ -33,64 +31,62 @@
 --volume /srv/gitlab/data:/var/opt/gitlab \
 gitlab/gitlab-ce:latest`
 
-**За процессом установки можно следить через логи докера**
+**За процессом установки можно следить через логи докера:**
 
 `docker logs -f gitlab`
 
-**Открываем GitLab в браузере**
+**Открываем GitLab в браузере и задаём пароль для пользователя root:**
 
-http://<IP-ADDRESS>/
+http://%IP-ADDRESS%/
 
-**Задаём пароль для пользователя root**
+**Импортируем файлы для нового проекта из нашего демо-репозитория:**
 
-**Импортируем репозиторий из нашего репозитория**
-
-http://<IP-ADDRESS>/projects/new
+http://%IP-ADDRESS%/projects/new
 Git Repository URL: https://github.com/Swordfish-Security/ArchDays2020
 
-**Скачиваем gitlab-runner, который будет запускать все необходимые операции по сканированию:**
+**Переходим в консоль и скачиваем gitlab-runner, который будет запускать все необходимые операции по сканированию:**
 
 `sudo curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64`
 
-**Делаем бинарный файл runner-a исполняемым**
+**Делаем бинарный файл runner-a исполняемым:**
 sudo chmod +x /usr/local/bin/gitlab-runner
 
-**Добавляем пользователя ОС для gitlab-runner-а, устанавливаем и запускаем сервис**
+**Добавляем пользователя ОС для gitlab-runner-а, устанавливаем и запускаем сервис:**
 
 `sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash && \
 sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner && \
 sudo gitlab-runner start`
 
-**Убеждаемся, что сервис успешно запустился**
+**Убеждаемся, что сервис успешно запустился:**
 
 `sudo gitlab-runner status`
 
 **Регистрируем наш сервис в Gitlab. Для этого берем параметры URL и token со страницы Runner-ов:**
 
-http://<IP-ADDRESS>/root/ArchDays2020/-/settings/ci_cd#js-runners-settings
+http://%IP-ADDRESS%/root/ArchDays2020/-/settings/ci_cd#js-runners-settings
 
 *URL:*
-http://<IP-ADDRESS>/
+http://%IP-ADDRESS%/
 *Token:*
-<TOKEN>
+%TOKEN%
 
 **Непосредственно регистрируем сервис, используя полученные значения:**
 
 `sudo gitlab-runner register -n \
-  --url "http://<IP-ADDRESS>/" \
-  --registration-token "<TOKEN>" \
+  --url "http://%IP-ADDRESS%/" \
+  --registration-token "%TOKEN%" \
   --executor docker \
   --description "docker-in-docker" \
   --docker-image "docker:19.03.12" \
   --docker-privileged \
   --tag-list "docker,privileged"`
 
-**Включаем Runner-ы для текущего проекта если не включены:**
+**Включаем Runner-ы для текущего проекта, если они ещё не включены:**
 
-http://<IP-ADDRESS>/root/ArchDays2020/-/settings/ci_cd#js-runners-settings
+http://%IP-ADDRESS%/root/ArchDays2020/-/settings/ci_cd#js-runners-settings
 
 **Конфигурация самого GitLab завершена и наш репозиторий содержит файл конфигурации пайплайна, который можно выполнить.**
-Для целей нашего живого демо мы уже задали все параметры, которые потребуются, чтобы просканировать собранное уязвимое приложение.
-Теперь достаточно запустить пайплайн на выполнение: http://<IP-ADDRESS>/root/ArchDays2020/-/pipelines/new
+Для целей нашего живого демо мы уже задали все параметры, которые потребуются, чтобы просканировать собранное уязвимое приложение и его Dockerfile.
+Теперь достаточно запустить пайплайн на выполнение: http://%IP-ADDRESS%/root/ArchDays2020/-/pipelines/new
 
 
