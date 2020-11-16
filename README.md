@@ -21,15 +21,15 @@
 
 **Стартуем инстанс GitLab, указывая наш ip-адрес:**
 
-`docker run --detach \
---hostname %IP-ADDRESS% \
---publish 443:443 --publish 80:80 \
---name gitlab \
---restart always \
---volume /srv/gitlab/config:/etc/gitlab \
---volume /srv/gitlab/logs:/var/log/gitlab \
---volume /srv/gitlab/data:/var/opt/gitlab \
-gitlab/gitlab-ce:latest`
+    docker run --detach \
+    --hostname %IP-ADDRESS% \
+    --publish 443:443 --publish 80:80 \
+    --name gitlab \
+    --restart always \
+    --volume /srv/gitlab/config:/etc/gitlab \
+    --volume /srv/gitlab/logs:/var/log/gitlab \
+    --volume /srv/gitlab/data:/var/opt/gitlab \
+    gitlab/gitlab-ce:latest
 
 **За процессом установки можно следить через логи докера:**
 
@@ -53,9 +53,9 @@ sudo chmod +x /usr/local/bin/gitlab-runner
 
 **Добавляем пользователя ОС для gitlab-runner-а, устанавливаем и запускаем сервис:**
 
-`sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash && \
-sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner && \
-sudo gitlab-runner start`
+    sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash && \
+    sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner && \
+    sudo gitlab-runner start`
 
 **Убеждаемся, что сервис успешно запустился:**
 
@@ -72,14 +72,14 @@ http://%IP-ADDRESS%/
 
 **Непосредственно регистрируем сервис, используя полученные значения:**
 
-`sudo gitlab-runner register -n \
-  --url "http://%IP-ADDRESS%/" \
-  --registration-token "%TOKEN%" \
-  --executor docker \
-  --description "docker-in-docker" \
-  --docker-image "docker:19.03.12" \
-  --docker-privileged \
-  --tag-list "docker,privileged"`
+    sudo gitlab-runner register -n \
+    --url "http://%IP-ADDRESS%/" \
+    --registration-token "%TOKEN%" \
+    --executor docker \
+    --description "docker-in-docker" \
+    --docker-image "docker:19.03.12" \
+    --docker-privileged \
+    --tag-list "docker,privileged"`
 
 **Включаем Runner-ы для текущего проекта, если они ещё не включены:**
 
