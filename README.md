@@ -56,7 +56,7 @@ http://%IP-ADDRESS%/projects/new
 
     sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash && \
     sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner && \
-    sudo gitlab-runner start`
+    sudo gitlab-runner start
 
 **Убеждаемся, что сервис успешно запустился:**
 
@@ -80,7 +80,7 @@ http://%IP-ADDRESS%/
     --description "docker-in-docker" \
     --docker-image "docker:19.03.12" \
     --docker-privileged \
-    --tag-list "docker,privileged"`
+    --tag-list "docker,privileged"
 
 **Включаем Runner-ы для текущего проекта, если они ещё не включены:**
 
