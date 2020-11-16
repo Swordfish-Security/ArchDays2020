@@ -1,9 +1,9 @@
 # Материал для живого демо конференции ArchDays 2020
 
 Ниже приведена инструкция по внедрению утилит проверки безопасности Docker-образов и Dockerfile на примере пайплайна в GitLab.
-В качестве примера сборки уязвимого Docker-образа мы будем использовать билд отсюда: https://github.com/Swordfish-Security/Pentest-In-Docker
+В качестве примера сборки уязвимого Docker-образа мы будем использовать исходники отсюда: https://github.com/Swordfish-Security/Pentest-In-Docker
 
-**Обновляемся и ставим докер:**
+**Обновляемся и ставим Docker:**
 
 `sudo apt-get update && sudo apt-get install docker.io`
 
@@ -11,15 +11,15 @@
 
 `sudo addgroup %username% docker`
 
-**Находим свой ip-адрес. Либо локальный:**
+**Находим свой IP-адрес. Либо локальный:**
 
 `ip addr`
 
-**... либо внешний:**
+**, либо внешний:**
 
 `curl -s http://whatismyip.akamai.com`
 
-**Стартуем инстанс GitLab, указывая наш ip-адрес:**
+**Запускаем инстанс GitLab, указывая наш IP-адрес:**
 
     docker run --detach \
     --hostname %IP-ADDRESS% \
@@ -31,7 +31,7 @@
     --volume /srv/gitlab/data:/var/opt/gitlab \
     gitlab/gitlab-ce:latest
 
-**За процессом установки можно следить через логи докера:**
+**За процессом установки можно следить через логи Docker:**
 
 `docker logs -f gitlab`
 
@@ -39,7 +39,7 @@
 
 http://%IP-ADDRESS%/
 
-**Импортируем файлы для нового проекта из нашего демо-репозитория:**
+**Импортируем файлы для нового проекта из нашего репозитория:**
 
 http://%IP-ADDRESS%/projects/new
 *Git Repository URL:* https://github.com/Swordfish-Security/ArchDays2020
@@ -48,11 +48,11 @@ http://%IP-ADDRESS%/projects/new
 
 `sudo curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64`
 
-**Делаем бинарный файл runner-a исполняемым:**
+**Делаем бинарный файл runner'a исполняемым:**
 
 `sudo chmod +x /usr/local/bin/gitlab-runner`
 
-**Добавляем пользователя ОС для gitlab-runner-а, устанавливаем и запускаем сервис:**
+**Добавляем пользователя ОС для gitlab-runner'а, устанавливаем и запускаем сервис:**
 
     sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash && \
     sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner && \
@@ -62,7 +62,7 @@ http://%IP-ADDRESS%/projects/new
 
 `sudo gitlab-runner status`
 
-**Регистрируем наш сервис в Gitlab. Для этого берем параметры URL и token со страницы Runner-ов:**
+**Регистрируем наш сервис в Gitlab. Для этого берем параметры URL и token со страницы Runner'ов:**
 
 http://%IP-ADDRESS%/root/ArchDays2020/-/settings/ci_cd#js-runners-settings
 
@@ -82,11 +82,11 @@ http://%IP-ADDRESS%/
     --docker-privileged \
     --tag-list "docker,privileged"
 
-**Включаем Runner-ы для текущего проекта, если они ещё не включены:**
+**Включаем Runner'ы для текущего проекта, если они ещё не включены:**
 
 http://%IP-ADDRESS%/root/ArchDays2020/-/settings/ci_cd#js-runners-settings
 
-**Конфигурация самого GitLab завершена и наш репозиторий содержит файл конфигурации пайплайна, который можно выполнить.**
+**Конфигурация самого GitLab завершена, и наш репозиторий содержит файл конфигурации пайплайна, который можно выполнить.**
 Для целей нашего живого демо мы уже задали все параметры, которые потребуются, чтобы просканировать собранное уязвимое приложение и его Dockerfile.
 Теперь достаточно запустить пайплайн на выполнение: 
 
